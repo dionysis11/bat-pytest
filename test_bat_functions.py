@@ -1,6 +1,8 @@
 import pytest
 from bat_functions import calculate_bat_power, signal_strength, get_bat_vehicle, fetch_joker_info
 
+# ===== EXERCISE 1: Basic Tests and Parametrization =====
+
 def test_calculate_bat_power():
     """Test that calculate_bat_power returns the correct power level."""
     assert calculate_bat_power(1) == 42
@@ -17,6 +19,8 @@ def test_calculate_bat_power():
 def test_signal_strength(distance, expected):
     """Test signal_strength with various distances using parametrization."""
     assert signal_strength(distance) == expected
+
+# ===== EXERCISE 2: Using Fixtures =====
 
 @pytest.fixture
 def bat_vehicles():
@@ -40,6 +44,8 @@ def test_get_bat_vehicle_unknown():
     with pytest.raises(ValueError) as excinfo:
         get_bat_vehicle("BatSubmarine")
     assert "Unknown vehicle: BatSubmarine" in str(excinfo.value)
+
+# ===== EXERCISE 3: Mocking External Dependencies =====
 
 def test_fetch_joker_info_without_delay(monkeypatch):
     """Test fetch_joker_info without the 1-second delay using monkeypatch."""
