@@ -1,5 +1,5 @@
 import pytest
-from bat_functions import calculate_bat_power, signal_strength, get_bat_vehicle
+from bat_functions import calculate_bat_power, signal_strength, get_bat_vehicle, fetch_joker_info
 
 def test_calculate_bat_power():
     """Test that calculate_bat_power returns the correct power level."""
@@ -39,4 +39,34 @@ def test_get_bat_vehicle_unknown():
     """Test that get_bat_vehicle raises ValueError for unknown vehicles."""
     with pytest.raises(ValueError) as excinfo:
         get_bat_vehicle("BatSubmarine")
-    assert "Unknown vehicle: BatSubmarine" in str(excinfo.value) 
+    assert "Unknown vehicle: BatSubmarine" in str(excinfo.value)
+
+def test_fetch_joker_info_without_delay(monkeypatch):
+    """Test fetch_joker_info without the 1-second delay using monkeypatch."""
+    # Mock the time.sleep function to do nothing
+    monkeypatch.setattr('time.sleep', lambda x: None)
+    
+    # Call the function and verify it returns the expected result
+    result = fetch_joker_info()
+    assert result == {'mischief_level': 100, 'location': 'unknown'}
+
+def test_fetch_joker_info_mock_return(monkeypatch):
+    """Test fetch_joker_info with a custom mocked return value."""
+    # Mock data we want to return
+    mock_data = {'mischief_level': 0, 'location': 'captured'}
+    
+    # Create a mock function that returns our mock data
+    def mock_fetch_joker_info():
+        return mock_data
+    
+    # Replace the original function with our mock
+    monkeypatch.setattr('bat_functions.fetch_joker_info', mock_fetch_joker_info)
+    
+    # Import the function again to get the mocked version
+    import bat_functions
+    result = bat_functions.fetch_joker_info()
+    
+    # Verify the mocked function returns our mock data
+    assert result == mock_data
+    assert result['mischief_level'] == 0
+    assert result['location'] == 'captured' 
