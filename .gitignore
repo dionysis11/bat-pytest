@@ -1,0 +1,11 @@
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# pytest cache
+.pytest_cache/
+
+# Python bytecode cache
+__pycache__/
